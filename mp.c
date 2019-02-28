@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 	while (c != EOF)
 	{
 		buf[i] = c;
-		if (c == '"')
+		if (c == '"') /* ignore quotations */
 		{
 			do
 			{
