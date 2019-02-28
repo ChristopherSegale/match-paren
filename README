@@ -1,0 +1,3 @@
+Match-Paren
+
+This is a command-line utility I wrote in order to be used as a tool by Common Lisp programmers who want to develop their applications using the Acme text editor.  This program takes standard input and matches opening and closing parentheses.
