@@ -12,6 +12,15 @@ int main(int argc, char *argv[])
 	while (c != EOF)
 	{
 		buf[i] = c;
+		if (c == '"')
+		{
+			do
+			{
+				i++;
+				c = getchar();
+				buf[i] = c;
+			} while (c != '"');
+		}
 		if (c == ';') /* ignore comments */
 			igc = 1;
 		if (igc && buf[i - 1] == '\n')
