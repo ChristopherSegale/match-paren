@@ -8,8 +8,8 @@ int main(int argc, char *argv[])
 	int cl = 0;
 	int igc = 0;
 	int diff;
-	char c = getchar();
-	while (c != EOF)
+	char c;
+	while ((c = getchar()) != EOF)
 	{
 		buf[i] = c;
 		if (c == '"') /* ignore quotations */
@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
 		if (c == ')' && !igc)
 			cl++;
 		i++;
-		c = getchar();
 	}
 	if (op > cl)
 	{
