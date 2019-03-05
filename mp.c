@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 	int c;
 	while ((c = getchar()) != EOF)
 	{
-		if (i <= (BUFSIZ - 2))
+		if (i <= (BUFSIZ - 3))
 			clear_buffer(buf, &i, BUFSIZ);
 		buf[i++] = c;
 		switch (st)
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 	{
 		while (pc-- > 0)
 		{
-			if (i <= (BUFSIZ - 2))
+			if (i <= (BUFSIZ - 3))
 				clear_buffer(buf, &i, BUFSIZ);
 			buf[i++] = ')';
 		}
