@@ -1,53 +1,68 @@
 #include <stdio.h>
+#include <string.h>
+
+void clear_buffer(char *b, int *i, int s)
+{
+	printf("%s", b);
+	*i = 0;
+	memset(b, 0, s);
+}
 
 int main(int argc, char *argv[])
 {
 	char buf[BUFSIZ];
 	int i = 0;
-	int op = 0;
-	int cl = 0;
-	int igc = 0;
-	int diff;
-	char c = getchar();
-	while (c != EOF)
+	int pc = 0;
+	enum state {init, quote, comment} st = init;
+	int c;
+	while ((c = getchar()) != EOF)
 	{
-		buf[i] = c;
-		if (c == '"') /* ignore quotations */
+		if (i <= (BUFSIZ - 2))
+			clear_buffer(buf, &i, BUFSIZ);
+		buf[i++] = c;
+		switch (st)
 		{
-			do
-			{
-				i++;
-				c = getchar();
-				buf[i] = c;
-			} while (c != '"');
+			case init:
+				switch (c)
+				{
+					case '(':
+						pc++;
+						break;
+					case ')':
+						pc--;
+						break;
+					case '"':
+						st = quote;
+						break;
+					case ';':
+						st = comment;
+						break;
+					default:
+						break;
+				}
+				break;
+			case quote:
+				if (c == '"')
+					st = init;
+				break;
+			case comment:
+				if (c == '\n')
+					st = init;
+				break;
 		}
-		if (c == ';') /* ignore comments */
-			igc = 1;
-		if (igc && buf[i - 1] == '\n')
-			igc = 0;
-		if (c == '(' && !igc)
-			op++;
-		if (c == ')' && !igc)
-			cl++;
-		i++;
-		c = getchar();
 	}
-	if (op > cl)
+	if (pc > 0)
 	{
-		diff = op - cl;
-		while (diff > 0)
+		while (pc-- > 0)
 		{
-			buf[i] = ')';
-			diff--;
-			i++;
+			if (i <= (BUFSIZ - 2))
+				clear_buffer(buf, &i, BUFSIZ);
+			buf[i++] = ')';
 		}
-		buf[i] = NULL;
+		buf[i] = 0;
 	}
-	else if (op < cl)
-	{
-		diff = cl - op;
-		buf[i - diff] = NULL;
-	}
+	else if (pc < 0)
+		buf[i + pc - 1] = 0;
 	printf("%s", buf);
 	return 0;
 }
