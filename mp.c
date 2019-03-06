@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 
-void clear_buffer(char *b, int *i, int s)
+void clear_buffer(char *b, int *i)
 {
+	int s = sizeof(b);
 	printf("%s", b);
 	*i = 0;
-	memset(b, 0, s);
+	memset(b, '\0', s);
 }
 
 int main(int argc, char *argv[])
@@ -18,7 +19,7 @@ int main(int argc, char *argv[])
 	while ((c = getchar()) != EOF)
 	{
 		if (i <= (BUFSIZ - 3))
-			clear_buffer(buf, &i, BUFSIZ);
+			clear_buffer(buf, &i);
 		buf[i++] = c;
 		switch (st)
 		{
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
 				}
 				break;
 			case quote:
-				if (c == '"')
+				if (c == '"' && buf[i - 2] != '\\')
 					st = init;
 				break;
 			case comment:
@@ -56,13 +57,13 @@ int main(int argc, char *argv[])
 		while (pc-- > 0)
 		{
 			if (i <= (BUFSIZ - 3))
-				clear_buffer(buf, &i, BUFSIZ);
+				clear_buffer(buf, &i);
 			buf[i++] = ')';
 		}
-		buf[i] = 0;
+		buf[i] = '\0';
 	}
 	else if (pc < 0)
-		buf[i + pc - 1] = 0;
+		buf[i + pc] = '\0';
 	printf("%s", buf);
 	return 0;
 }
