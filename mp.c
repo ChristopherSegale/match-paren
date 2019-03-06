@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
 	char buf[BUFSIZ];
 	int i = 0;
 	int pc = 0;
+	int igq = 0;
 	enum state {init, quote, comment} st = init;
 	int c;
 	while ((c = getchar()) != EOF)
@@ -43,8 +44,15 @@ int main(int argc, char *argv[])
 				}
 				break;
 			case quote:
-				if (c == '"' && buf[i - 2] != '\\')
-					st = init;
+				if (c == '\\')
+					igq = 1;
+				if (c == '"')
+				{
+					if (igq)
+						igq = 0;
+					else
+						st = init;
+				}
 				break;
 			case comment:
 				if (c == '\n')
