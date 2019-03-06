@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 	int i = 0;
 	int pc = 0;
 	int igq = 0;
-	enum state {init, quote, comment} st = init;
+	enum state {init, quote, comment, escape} st = init;
 	int c;
 	while ((c = getchar()) != EOF)
 	{
@@ -39,6 +39,9 @@ int main(int argc, char *argv[])
 					case ';':
 						st = comment;
 						break;
+					case '\\':
+						st = escape;
+						break;
 					default:
 						break;
 				}
@@ -57,6 +60,9 @@ int main(int argc, char *argv[])
 			case comment:
 				if (c == '\n')
 					st = init;
+				break;
+			case escape:
+				st = init;
 				break;
 		}
 	}
